@@ -75,7 +75,8 @@ router.get('/socket', function (req, res, next) {
       myJs: [
           { src: '/javascripts/ModuleForm.js', type: 'text/babel' },
           { src: '/javascripts/socket.js', type: 'text/babel' }
-      ]
+      ],
+      test: 'Test11111'
   });
 });
 
