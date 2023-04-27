@@ -80,18 +80,75 @@ router.get('/socket', function (req, res, next) {
     content: 'Test11111'
   });
 });
-router.get('/detail', function (req, res, next) {
-  console.log('XXXXXx');
-  console.log(JSON.stringify(req.query));
+router.get('/ecpayTest', function (req, res, next) {
   res.render('reactRootTemplate', {
-    title: 'detail',
+    title: 'ecpayTest',
     myJs: [
       { src: '/javascripts/ModuleForm.js', type: 'text/babel' },
-      { src: '/javascripts/detail.js', type: 'text/babel' }
+      { src: '/javascripts/ecpay.js', type: 'text/babel' }
     ],
-    content: JSON.stringify(req.query)
+    content: ''
   });
 });
+router.post('/createOrder', function (req, res, next) {
+  const hashKey = 'pwFHCqoQZGmho4w6';
+  const hashIV = 'EkRm7iFT261dpevs';
+  
+  let chkStr = generateCheckMacValue(req.body,hashKey,hashIV)
+  console.log(chkStr);
+  res.send(chkStr)
+  res.end()
+});
+router.get('/OrderOK', function (req, res, next) {
+  res.render('reactRootTemplate', {
+    title: 'OrderOK',
+    myJs: [
+      { src: '/javascripts/ModuleForm.js', type: 'text/babel' }
+    ],
+    content: ''
+  });
+});
+
+function generateCheckMacValue(params, hashKey, hashIV) {
+  // Step 1: sort parameters by alphabet order
+  const sortedParams = Object.keys(params)
+    .sort()
+    .reduce((obj, key) => {
+      obj[key] = params[key];
+      return obj;
+    }, {});
+
+  // Step 2: concatenate sorted parameters with HashKey and HashIV
+  let checkString = `HashKey=${hashKey}`;
+  for (let key in sortedParams) {
+    checkString += `&${key}=${sortedParams[key]}`;
+  }
+  checkString += `&HashIV=${hashIV}`;
+
+  // Step 3: URL encode
+  checkString = encodeURIComponent(checkString)
+    .replace(/%20/g, '+')
+    .replace(/%2d/g, '-')
+    .replace(/%5f/g, '_')
+    .replace(/%2e/g, '.')
+    .replace(/%21/g, '!')
+    .replace(/%2a/g, '*')
+    .replace(/%28/g, '(')
+    .replace(/%29/g, ')');
+
+  // Step 4: to lowercase
+  checkString = checkString.toLowerCase();
+
+  // Step 5: SHA256 encryption
+  const sha256 = require('crypto').createHash('sha256');
+  sha256.update(checkString);
+  const encryptedString = sha256.digest('hex');
+
+  // Step 6: to uppercase
+  const checkMacValue = encryptedString.toUpperCase();
+
+  return checkMacValue;
+}
 
 const encodeAES256 = (str, hashKey, hashIV) => {
   const cipher = crypto.createCipheriv('aes-256-cbc', hashKey, hashIV);
