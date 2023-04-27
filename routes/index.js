@@ -16,12 +16,13 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 router.get('/cashFlowTest', function (req, res, next) {
-  res.render('reactRootTemplate', { 
-    title: 'cashFlowTest' ,
+  res.render('reactRootTemplate', {
+    title: 'cashFlowTest',
     myJs: [
-      {src:'/javascripts/ModuleForm.js',type:'text/babel'},
-      {src:'/javascripts/cashFlowTest.js',type:'text/babel'}
-    ]
+      { src: '/javascripts/ModuleForm.js', type: 'text/babel' },
+      { src: '/javascripts/cashFlowTest.js', type: 'text/babel' }
+    ],
+    content:''
   });
 });
 router.post('/cashFlowTest', async function (req, res, next) {
@@ -29,14 +30,14 @@ router.post('/cashFlowTest', async function (req, res, next) {
 
   let reqStr = `MerchantID=${req.body.MerchantID}&TimeStamp=${req.body.TimeStamp}&Version=${req.body.Version}&RespondType=${req.body.RespondType}&MerchantOrderNo=${req.body.MerchantOrderNo}&Amt=${parseInt(req.body.Amt)}&NotifyURL=${encodeURIComponent('https://webhook.site/d4db5ad1-2278-466a-9d66-78585c0dbadb')}&ReturnURL=${''}$ItemDesc=${encodeURIComponent(req.body.ItemDesc)}`//&Email=${encodeURIComponent(req.body.Email)}`
 
-  const strAES256 = encodeAES256(reqStr,HASHKEY,HASHIV)
-  const strSHA256 = encodeSHA256(strAES256,HASHKEY,HASHIV)
+  const strAES256 = encodeAES256(reqStr, HASHKEY, HASHIV)
+  const strSHA256 = encodeSHA256(strAES256, HASHKEY, HASHIV)
 
   const postData = {
-    MerchantID:req.body.MerchantID,
-    TradeInfo:strAES256,
-    TradeSha:strSHA256,
-    Version:req.body.Version
+    MerchantID: req.body.MerchantID,
+    TradeInfo: strAES256,
+    TradeSha: strSHA256,
+    Version: req.body.Version
   }
 
   console.log(postData)
@@ -53,7 +54,7 @@ router.get('/query', function (req, res, next) {
 router.post('/query', async function (req, res, next) {
   let tt = `IV=${HASHIV}&Amt=${req.body.Amt}&MerchantID=${req.body.MerchantID}&MerchantOrderNo=${req.body.MerchantOrderNo}&Key=${HASHKEY}`
 
-  let cv = encodeSHA256(tt,HASHKEY,HASHIV)
+  let cv = encodeSHA256(tt, HASHKEY, HASHIV)
   console.log(cv)
 
   req.body.CheckValue = cv
@@ -71,28 +72,40 @@ router.post('/query', async function (req, res, next) {
 });
 router.get('/socket', function (req, res, next) {
   res.render('reactRootTemplate', {
-      title: 'socket',
-      myJs: [
-          { src: '/javascripts/ModuleForm.js', type: 'text/babel' },
-          { src: '/javascripts/socket.js', type: 'text/babel' }
-      ],
-      test: 'Test11111'
+    title: 'socket',
+    myJs: [
+      { src: '/javascripts/ModuleForm.js', type: 'text/babel' },
+      { src: '/javascripts/socket.js', type: 'text/babel' }
+    ],
+    content: 'Test11111'
+  });
+});
+router.get('/detail', function (req, res, next) {
+  console.log('XXXXXx');
+  console.log(JSON.stringify(req.query));
+  res.render('reactRootTemplate', {
+    title: 'detail',
+    myJs: [
+      { src: '/javascripts/ModuleForm.js', type: 'text/babel' },
+      { src: '/javascripts/detail.js', type: 'text/babel' }
+    ],
+    content: JSON.stringify(req.query)
   });
 });
 
-const encodeAES256 = (str,hashKey,hashIV) => {
+const encodeAES256 = (str, hashKey, hashIV) => {
   const cipher = crypto.createCipheriv('aes-256-cbc', hashKey, hashIV);
   let encrypted = cipher.update(str, 'utf8', 'hex');
   encrypted += cipher.final('hex');
   return encrypted
 }
-const decodeAES256 = (encodeStr,hashKey,hashIV) => {
+const decodeAES256 = (encodeStr, hashKey, hashIV) => {
   const decipher = crypto.createDecipheriv('aes-256-cbc', hashKey, hashIV);
   let decrypted = decipher.update(encodeStr, 'hex', 'utf8');
   decrypted += decipher.final('utf8');
   return decrypted
 }
-const encodeSHA256 = (str,hashKey,hashIV)=>{
+const encodeSHA256 = (str, hashKey, hashIV) => {
   const sha256 = crypto.createHash('sha256');
   const content = `HashKey=${hashKey}&${str}&HashIV=${hashIV}`;
   return sha256.update(content).digest('hex').toUpperCase();
