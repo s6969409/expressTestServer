@@ -28,7 +28,10 @@ const App = () => {
         submitDatas.CheckMacValue = res
 
         let urlPara = buildUrlPara(submitDatas)
-        window.location.assign(`https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5/?${urlPara}`);
+        console.log('urlPara', urlPara);
+        let enUrl = encodeURI(urlPara)
+        console.log('enUrl', enUrl);
+        postEcpay(enUrl,submitDatas)
       },
       error: (err) => {
         console.error('err', err);
@@ -42,6 +45,22 @@ const App = () => {
       checkString += `&${key}=${params[key]}`;
     }
     return checkString.substring(1);
+  }
+
+  const postEcpay = (urlPara,submitDatas)=>{
+    $.ajax({
+      url: `https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5`,
+      type: 'POST',
+      dataType: 'json',//php server要註解掉
+      contentType: 'application/x-www-form-urlencoded',
+      data: JSON.stringify(submitDatas),
+      success: (res) => {
+        console.log('success', res);
+      },
+      error: (err) => {
+        console.error('err', err);
+      }
+    });
   }
 
   return <Form datas={datas} submit={sb} />
