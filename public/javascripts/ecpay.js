@@ -31,7 +31,7 @@ const App = () => {
         console.log('urlPara', urlPara);
         let enUrl = encodeURI(urlPara)
         console.log('enUrl', enUrl);
-        postEcpay(enUrl,submitDatas)
+        createOrder(enUrl,submitDatas)
       },
       error: (err) => {
         console.error('err', err);
@@ -47,7 +47,7 @@ const App = () => {
     return checkString.substring(1);
   }
 
-  const postEcpay = (urlPara,submitDatas)=>{
+  const createOrder = (urlPara,submitDatas)=>{
     $.ajax({
       url: `https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5`,
       type: 'POST',
