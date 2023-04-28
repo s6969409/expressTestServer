@@ -100,13 +100,8 @@ router.post('/createOrder', function (req, res, next) {
   res.end()
 });
 router.get('/OrderOK', function (req, res, next) {
-  res.render('reactRootTemplate', {
-    title: 'OrderOK',
-    myJs: [
-      { src: '/javascripts/ModuleForm.js', type: 'text/babel' }
-    ],
-    content: ''
-  });
+  res.send('1|OK')
+  res.end()
 });
 
 function generateCheckMacValue(params, hashKey, hashIV) {
