@@ -13,6 +13,8 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!--jquery-3.5.0.js-->
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <!--axios-->
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
     <!--js-->
     <% myJs.forEach(js => { %>
       <script src=<%=js.src %> type=<%=js.type %>></script>
@@ -21,5 +23,7 @@
   <body>
     <div id="root"></div>
     <div><%= content %></div>
+    <script type="text/javascript">function sbt(e){e.preventDefault();console.log(e)}</script>
+    <form id="_form_aiochk" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="post" onsubmit=""><input type="hidden" name="MerchantTradeNo" id="MerchantTradeNo" value="f0a0d7e9fae1bb72bc93" /><input type="hidden" name="MerchantTradeDate" id="MerchantTradeDate" value="2023/04/27 03:03:33" /><input type="hidden" name="TotalAmount" id="TotalAmount" value="100" /><input type="hidden" name="TradeDesc" id="TradeDesc" value="測試交易描述" /><input type="hidden" name="ItemName" id="ItemName" value="測試商品等" /><input type="hidden" name="ReturnURL" id="ReturnURL" value="https://expresstestserver.onrender.com/OrderOK" /><input type="hidden" name="ChoosePayment" id="ChoosePayment" value="ALL" /><input type="hidden" name="PlatformID" id="PlatformID" value="" /><input type="hidden" name="MerchantID" id="MerchantID" value="2000132" /><input type="hidden" name="InvoiceMark" id="InvoiceMark" value="N" /><input type="hidden" name="IgnorePayment" id="IgnorePayment" value="" /><input type="hidden" name="DeviceSource" id="DeviceSource" value="" /><input type="hidden" name="EncryptType" id="EncryptType" value="1" /><input type="hidden" name="PaymentType" id="PaymentType" value="aio" /><input type="hidden" name="CheckMacValue" id="CheckMacValue" value="77717CA5DD9EDEECA5AE28C9C8893575B9C16AC77CD1A96A3AD49A1E885A51D6" /><input type="submit" value="SB" /></form>
   </body>
 </html>

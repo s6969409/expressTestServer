@@ -1,3 +1,10 @@
+function handleResponse(data) {
+  console.log(data);
+}
+
+const script = document.createElement('script');
+script.src = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5?callback=handleResponse';
+document.body.appendChild(script);
 const App = () => {
   const datas = [
     { name: 'MerchantID', defaultValue: '3002607' },
@@ -15,8 +22,8 @@ const App = () => {
   ]
 
   const sb = async (submitDatas) => {
-    console.log(submitDatas);
-
+    console.log("submitDatas", submitDatas);
+    
     $.ajax({
       url: '/createOrder',
       type: 'POST',
@@ -25,13 +32,7 @@ const App = () => {
       data: JSON.stringify(submitDatas),
       success: (res) => {
         console.log('success', res);
-        submitDatas.CheckMacValue = res
-
-        let urlPara = buildUrlPara(submitDatas)
-        console.log('urlPara', urlPara);
-        let enUrl = encodeURI(urlPara)
-        console.log('enUrl', enUrl);
-        createOrder(enUrl,submitDatas)
+        createOrder(res)
       },
       error: (err) => {
         console.error('err', err);
@@ -47,7 +48,11 @@ const App = () => {
     return checkString.substring(1);
   }
 
-  const createOrder = (urlPara,submitDatas)=>{
+  const createOrder = (submitDatas) => {
+    axios.post('https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5', submitDatas)
+      .then((res) => { console.log('success', res); })
+      .catch((err) => { console.error('err', err) })
+    return
     $.ajax({
       url: `https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5`,
       type: 'POST',
@@ -62,6 +67,43 @@ const App = () => {
       }
     });
   }
+  const temp = () => {
+    axios.post('https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5', {
+      "MerchantID": "3002607",
+      "MerchantTradeNo": "F3BC68DA-CDE1-4E2C-9B06-3E06A7C0134C",
+      "MerchantTradeDate": "2023/04/27 03:03:33",
+      "PaymentType": "aio",
+      "TotalAmount": "123",
+      "TradeDesc": "我是商品描述",
+      "ItemName": "我是商品名稱",
+      "ReturnURL": "https://expresstestserver.onrender.com/OrderOK",
+      "ChoosePayment": "ALL",
+      "CheckMacValue": "D5FD74C2EFC34D054D81F2EB3A5D8D0FC7229E0F260C710DA72568F318C9B73A",
+      "EncryptType": "1",
+      "ClientBackURL": "https://www.google.com.tw/"
+    })
+  }
+
+
+  fetch('https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5',{
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      "MerchantID": "3002607",
+      "MerchantTradeNo": "F3BC68DA-CDE1-4E2C-9B06-3E06A7C0134C",
+      "MerchantTradeDate": "2023/04/27 03:03:33",
+      "PaymentType": "aio",
+      "TotalAmount": "123",
+      "TradeDesc": "我是商品描述",
+      "ItemName": "我是商品名稱",
+      "ReturnURL": "https://expresstestserver.onrender.com/OrderOK",
+      "ChoosePayment": "ALL",
+      "CheckMacValue": "D5FD74C2EFC34D054D81F2EB3A5D8D0FC7229E0F260C710DA72568F318C9B73A",
+      "EncryptType": "1",
+      "ClientBackURL": "https://www.google.com.tw/"
+    }),
+    mode: 'no-cors'
+  })
 
   return <Form datas={datas} submit={sb} />
 }
