@@ -2,9 +2,6 @@ function handleResponse(data) {
   console.log(data);
 }
 
-const script = document.createElement('script');
-script.src = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5?callback=handleResponse';
-document.body.appendChild(script);
 const App = () => {
   const datas = [
     { name: 'MerchantID', defaultValue: '3002607' },
@@ -108,5 +105,5 @@ const App = () => {
   return <Form datas={datas} submit={sb} />
 }
 
-
+const branchTest = 2;
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
