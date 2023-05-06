@@ -95,24 +95,12 @@ router.post('/createOrder', async function (req, res, next) {
   const hashIV = 'EkRm7iFT261dpevs';
   const postData = req.body;
   postData.CheckMacValue = generateCheckMacValue(req.body,hashKey,hashIV)
-  console.log(postData);/*
-  await axios.post('https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5',postData)
-  .then((response)=>{
-    //console.log(response)
-    //console.log(response.headers['content-type'])
-    //console.log(response.request.res.responseUrl)
-    if (response.headers['content-type'] === 'text/html' || true) {
-      // 取得轉址的 URL
-      const redirectUrl = response.request.res.responseUrl;
-      // 將轉址的 URL 傳回給前端
-      res.status(200).json({ url: redirectUrl });
-    }
-  })
-  .catch((err)=>{console.log(err)})*/
+  console.log(postData);
   res.send(postData)
   res.end()
 });
 router.get('/OrderOK', function (req, res, next) {
+  console.log(req.body);
   res.send('1|OK')
   res.end()
 });
