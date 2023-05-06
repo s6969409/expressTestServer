@@ -113,6 +113,7 @@ router.post('/createOrder', async function (req, res, next) {
   res.end()
 });
 router.get('/OrderOK', function (req, res, next) {
+  console.log(req.body);
   res.send('1|OK')
   res.end()
 });
