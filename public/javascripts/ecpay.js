@@ -10,7 +10,8 @@ const App = () => {
     ReturnURL: 'https://expresstestserver.onrender.com/OrderOK',
     ChoosePayment: 'ALL',
     EncryptType: 1,
-    ClientBackURL: 'https://www.google.com.tw/'
+    ClientBackURL: 'http://localhost:3000/ecpayTest',
+    NeedExtraPaidInfo :'Y'
   }
 
   const [postData, setPostData] = useState()
@@ -19,7 +20,7 @@ const App = () => {
     console.log("submitDatas", submitDatas);
 
     $.ajax({
-      url: '/createOrder',
+      url: '/ecpayDataCreate',
       type: 'POST',
       //dataType: 'json',//php server要註解掉
       contentType: 'application/json; charset=UTF-8',

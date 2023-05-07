@@ -90,7 +90,7 @@ router.get('/ecpayTest', function (req, res, next) {
     content: ''
   });
 });
-router.post('/createOrder', async function (req, res, next) {
+router.post('/ecpayDataCreate', async function (req, res, next) {
   const hashKey = 'pwFHCqoQZGmho4w6';
   const hashIV = 'EkRm7iFT261dpevs';
   const postData = req.body;
